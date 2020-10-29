@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+#include <cstdlib>
+
 #define DEAD 0
 #define LIVE 1
 #define CELL_SIZE 12
@@ -7,14 +9,14 @@
 #define WIDTH 110
 #define HEIGHT 58
 
-#define SCREEN_WIDTH CELL_SIZE*WIDTH
-#define SCREEN_HEIGHT CELL_SIZE*HEIGHT
+#define SCREEN_WIDTH (CELL_SIZE*WIDTH)+4
+#define SCREEN_HEIGHT (CELL_SIZE*HEIGHT)+4
 
-void init(int state[][HEIGHT], int temp[][HEIGHT], sf::RectangleShape cells[][HEIGHT])
+void init(bool state[][HEIGHT], bool temp[][HEIGHT], sf::RectangleShape cells[][HEIGHT])
 {
-	for(int y = 0; y < HEIGHT; y++)
+	for(int x = 0; x < WIDTH; x++)
 	{
-		for(int x = 0; x < WIDTH; x++)
+		for(int y = 0; y < HEIGHT; y++)
 		{
 			state[x][y] = DEAD;
 			temp[x][y] = DEAD;
@@ -26,81 +28,87 @@ void init(int state[][HEIGHT], int temp[][HEIGHT], sf::RectangleShape cells[][HE
 		}
 	}
 }
-int count_neighbour(int state[][HEIGHT], int x, int y)
+unsigned int mod(int value, unsigned int divisor)
+{
+	unsigned int mod = value % divisor;
+
+
+	return mod + (mod < 0 ? divisor : 0);
+}
+int count_neighbour(bool state[][HEIGHT], int x, int y)
 {
 	int number_neighbour = 0;
+	int left;
+	int right = (x+1)%WIDTH;
+	int up;
+	int down = (y+1)%HEIGHT;
 
+	if(x-1<0)
+		left = WIDTH - (abs(x-1) % WIDTH);
+	else
+		left = (x-1)%WIDTH;
+
+	if(y-1<0)
+		up = HEIGHT - (abs(y-1) % HEIGHT);
+	else
+		up = (y-1)%HEIGHT;
 	//Diagonal up-left
-	if(state[(x-1)%WIDTH][(y+1)%HEIGHT] == LIVE)
+	if(state[left][up] == LIVE)
 	{
 		number_neighbour++;
 	}
 
 	//up
-	if(state[x][(y+1)%HEIGHT] == LIVE)
+	if(state[x][up] == LIVE)
 	{
 		number_neighbour++;
 	}
 
 	//Diagonal up-right
-	if(state[(x+1)%WIDTH][(y+1)%HEIGHT] == LIVE)
+	if(state[right][up] == LIVE)
 	{
 		number_neighbour++;
 	}
 
 	//left
-	if(state[(x-1)%WIDTH][y] == LIVE)
+	if(state[left][y] == LIVE)
 	{
 		number_neighbour++;
 	}
 
 	//right
-	if(state[(x+1)%WIDTH][y] == LIVE)
+	if(state[right][y] == LIVE)
 	{
 		number_neighbour++;
 	}
 
 	//Diagonal down-left
-	if(state[(x-1)%WIDTH][(y-1)%HEIGHT] == LIVE)
+	if(state[left][down] == LIVE)
 	{
 		number_neighbour++;
 	}
 
 	//down
-	if(state[x][(y-1)%HEIGHT] == LIVE)
+	if(state[x][down] == LIVE)
 	{
 		number_neighbour++;
 	}
 
 	//Diagonal down-right
-	if(state[(x+1)%WIDTH][(y-1)%HEIGHT] == LIVE)
+	if(state[right][down] == LIVE)
 	{
 		number_neighbour++;
 	}
 
 	return number_neighbour;
 }
-bool check_empty(int state[][HEIGHT])
-{
-	bool result;
-	for(int y = 0; y < HEIGHT; y++)
-	{
-		for(int x = 0; x < WIDTH; x++)
-		{
-			if(state[x][y] == LIVE)
-				result = true;
-			else
-				result = false;
-		}
-	}
-	return result;
-}
-void run(int state[][HEIGHT], int temp[][HEIGHT], sf::RectangleShape cells[][HEIGHT])
+
+void run(bool state[][HEIGHT], bool temp[][HEIGHT], sf::RectangleShape cells[][HEIGHT])
 {
 
-	for(int y = 0; y < HEIGHT; y++)
+	for(int x = 0; x < WIDTH; x++)
 	{
-		for(int x = 0; x < WIDTH; x++)
+		for(int y = 0; y < HEIGHT; y++)
 		{
 			int number_neighboor = count_neighbour(state, x, y);
 
@@ -121,9 +129,9 @@ void run(int state[][HEIGHT], int temp[][HEIGHT], sf::RectangleShape cells[][HEI
 		}
 	}
 
-	for(int y = 0; y < HEIGHT; y++)
+	for(int x = 0; x < WIDTH; x++)
 	{
-		for(int x = 0; x < WIDTH; x++)
+		for(int y = 0; y < HEIGHT; y++)
 		{
 			state[x][y] = temp[x][y];
 			if(state[x][y] == LIVE)
@@ -139,10 +147,10 @@ int main()
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Game Of Life", sf::Style::Titlebar | sf::Style::Close);
     window.setFramerateLimit(60);
 	sf::Event event;
-	int state[WIDTH][HEIGHT] ;
-	int temp[WIDTH][HEIGHT];
+	bool state[WIDTH][HEIGHT] ;
+	bool temp[WIDTH][HEIGHT];
 	sf::RectangleShape cells[WIDTH][HEIGHT];
-	int running = false;
+	bool running = false;
 
 	init(state, temp, cells);
 	while(window.isOpen())
@@ -201,9 +209,9 @@ int main()
 		if(running)
 			run(state, temp, cells);
 		window.clear();
-		for(int y = 0; y < HEIGHT; y++)
+		for(int x = 0; x < WIDTH; x++)
 		{
-			for(int x = 0; x < WIDTH; x++)
+			for(int y = 0; y < HEIGHT; y++)
 			{
 				window.draw(cells[x][y]);
 			}
