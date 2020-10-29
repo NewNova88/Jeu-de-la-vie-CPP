@@ -2,6 +2,7 @@
 1603904041 source:/home/pierre/Documents/C/GTK/Game_of_Life/main.cpp
 	<SFML/Graphics.hpp>
 
-1603964678 source:/home/pierre/Documents/C++/Game_of_Life/main.cpp
+1603970737 source:/home/pierre/Documents/C++/Game_of_Life/main.cpp
 	<SFML/Graphics.hpp>
+	<cstdlib>
 
