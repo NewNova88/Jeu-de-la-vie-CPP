@@ -149,6 +149,7 @@ int main()
 	sf::Event event;
 	bool state[WIDTH][HEIGHT] ;
 	bool temp[WIDTH][HEIGHT];
+	int cellX, cellY;
 	sf::RectangleShape cells[WIDTH][HEIGHT];
 	bool running = false;
 
@@ -162,19 +163,25 @@ int main()
 				window.close();
 			}
 			sf::Vector2i mouse_cursor = sf::Mouse::getPosition(window);
+			cellX = mouse_cursor.x/CELL_SIZE;
+			cellY = mouse_cursor.y/CELL_SIZE;
+			if(cellX == WIDTH)
+				cellX--;
+			if(cellY == HEIGHT)
+				cellY--;
 			if((mouse_cursor.x <= SCREEN_WIDTH && mouse_cursor.y <= SCREEN_HEIGHT) && (mouse_cursor.x > 0 && mouse_cursor.y > 0))
 			{
 				if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					cells[mouse_cursor.x/CELL_SIZE][mouse_cursor.y/CELL_SIZE].setFillColor(sf::Color::Black);
-					state[mouse_cursor.x/CELL_SIZE][mouse_cursor.y/CELL_SIZE] = LIVE;
+					cells[cellX][cellY].setFillColor(sf::Color::Black);
+					state[cellX][cellY] = LIVE;
 				}
 
 
 				if(sf::Mouse::isButtonPressed((sf::Mouse::Right)))
 				{
-					cells[mouse_cursor.x/CELL_SIZE][mouse_cursor.y/CELL_SIZE].setFillColor(sf::Color::White);
-					state[mouse_cursor.x/CELL_SIZE][mouse_cursor.y/CELL_SIZE] = DEAD;
+					cells[cellX][cellY].setFillColor(sf::Color::White);
+					state[cellX][cellY] = DEAD;
 				}
 			}
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::C))
