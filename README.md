@@ -33,4 +33,8 @@ Touche Échap : Quitter (aussi faisable avec la petite croix)
 Il vous faudra SFML et un compilateur c++. 
 Sous Linux, vous pouvez faire : `g++ main.cpp -lsfml-graphics -lsfml-system -lsfml-window`
 
+Alternativement, la commande `make` compilera le programme avec les optimisations.
+La commande `make debug` enlève les optimisation et ajoute le drapeau `-g` pour le débogage.
+La commande `make clean` supprime le dossier `bin` contenant l'exécutable.
+
 # Bon jeu !
