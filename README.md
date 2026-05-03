@@ -30,7 +30,7 @@ Touche R du clavier : stoppe le jeu et efface tout
 Touche Échap : Quitter (aussi faisable avec la petite croix)
 
 # Ok mais comment je le fait tourner ? Ou comment je le compile ?
-Si vous êtes sous Linux (toute distrib basée sur Debian), allez dans bin/Release/ et vous avez l'exécutable. Il suffit ensuite d'ouvrir un terminal et de faire ./Game_of_Life
-Si vous voulez le compiler (sous linux, Windows ou MacOs), il va vous faloir Code::Blocks, c'est un IDE libre et gratuit. Il va également vous falloir SFML (disponible ici : https://www.sfml-dev.org/index-fr.php). Une fois ces deux choses installées, il vous suffit d'ouvrir le projet (le fichier .cbp), et de compiler. Voilà!
+Il vous faudra SFML et un compilateur c++. 
+Sous Linux, vous pouvez faire : `g++ main.cpp -lsfml-graphics -lsfml-system -lsfml-window`
 
 # Bon jeu !
